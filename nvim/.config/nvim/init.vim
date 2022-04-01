@@ -16,6 +16,7 @@ Plug 'simeji/winresizer'
 Plug 'tpope/vim-sleuth'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'airblade/vim-gitgutter'     " Show git diff of lines edited
 Plug 'tpope/vim-fugitive'         " :Gblame
@@ -48,8 +49,8 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 " JS,TS,REACT
 " -----------
 "Plug 'herringtondarkholme/yats.vim' "Included in Vim^8.2
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
+" Plug 'pangloss/vim-javascript'
+" Plug 'leafgarland/typescript-vim'
 " Plug 'mxw/vim-jsx'
 " Plug 'MaxMEllon/vim-jsx-pretty'
 " Plug 'peitalin/vim-jsx-typescript'
@@ -73,11 +74,14 @@ call plug#end() " ------------------------------------------------------------
 "already built in vim, just need to activate
 packadd! matchit
 
-set nu  "line number
-set rnu "relative line number
+
 set tabstop=2
 set shiftwidth=0 "follow tabstop
 set softtabstop=-1 "follow shiftwidth
+
+set nu  "line number
+set rnu "relative line number
+set expandtab
 set autoindent
 set smartindent
 set scrolloff=4 "start scrolling `n` lines before the top/bottom
@@ -246,3 +250,16 @@ nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 " nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
+
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+
+  -- ignore_install = { "javascript" },
+
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
+}
+EOF
