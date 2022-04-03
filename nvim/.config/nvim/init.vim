@@ -25,53 +25,26 @@ Plug 'tpope/vim-rhubarb'          " :GBrowse
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'lilydjwg/colorizer'
 Plug 'godlygeek/tabular'
-Plug 'jiangmiao/auto-pairs'
+Plug 'mattn/emmet-vim'
 
 Plug 'morhetz/gruvbox'
 
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
 Plug 'shime/vim-livedown' "needs : npm install -g livedown
 
-" Plug 'vim-syntastic/syntastic'
-
-" Plug 'janko/vim-test'             " Run Ruby and Elixir tests
-" Plug 'nikolalsvk/vim-rails'       " Rails plugin
-
 " LSP ------------------------------------------------------------------------
-" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-" Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
-" Plug 'Shougo/ddc.vim'
-" Plug 'vim-denops/denops.vim'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
-" JS,TS,REACT
-" -----------
-"Plug 'herringtondarkholme/yats.vim' "Included in Vim^8.2
-" Plug 'pangloss/vim-javascript'
-" Plug 'leafgarland/typescript-vim'
-" Plug 'mxw/vim-jsx'
-" Plug 'MaxMEllon/vim-jsx-pretty'
-" Plug 'peitalin/vim-jsx-typescript'
-"Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-
-" GRAPHQL
-" -------
-"Plug 'jparise/vim-graphql'
-
-" PYTHON
-" ------
-"Plug ''
-
-" RUST
-" ----
-" Plug 'rust-lang/rust.vim'
 
 call plug#end() " ------------------------------------------------------------
 
-"Plugin for matching HTML tags using %
-"already built in vim, just need to activate
+" Plugin for matching HTML tags using %
+" already built in vim, just need to activate
 packadd! matchit
 
 
@@ -87,32 +60,38 @@ set smartindent
 set scrolloff=4 "start scrolling `n` lines before the top/bottom
 set incsearch "show search result on the fly
 set nohlsearch "set noh "to toggle off current highlight
-set wildmenu              "similar autocomplete menu to zsh
-set wildmode=longest,full " ''
 " set clipboard=unnamedplus
-set path+=**
 set splitbelow splitright "open on right and bottom as default
 " set thesaurus+=/home/bbaga/Documents/mthesaur.txt "set thresaurus <C-X><C-T>
 set omnifunc=syntaxcomplete#Complete
 set hidden
-"set nowrap "does not unwrap if line are too long
-"set noswapfile
-"set nobackup
+" set nowrap "does not unwrap if line are too long
+" set noswapfile
+" set nobackup
 set backspace=indent,eol,start
 set cc=80
+set path+=**
+set wildmenu              "similar autocomplete menu to zsh
+set wildmode=longest,full " ''
 
-"ignore some folders when using finders (too slow otherwise !)
-set wildignore=*/dist*/*,*/target/*,*/builds/*,*/node_modules/*,*/.git/*
+" ignore some folders when using finders
+set wildignore+=**/dist*/*
+set wildignore+=**/target/*
+set wildignore+=**/builds/*
+set wildignore+=**/node_modules/*
+set wildignore+=**/.git/*
+set wildignore+=*.pyc
+set wildignore+=*_build/*
 
 let mapleader = ","
 
 " SETUP FOR NETRW plugin
 let g:netrw_banner=0
 let g:netrw_list_hide='.*\.swp$'
-"autocmd FileType netrw nnoremap ? :help netrw-quickmap<CR> 
+" autocmd FileType netrw nnoremap ? :help netrw-quickmap<CR> 
 
 " Delete empty space from the end of lines on every save
-"autocmd BufWritePre * :%s/\s\+$//e
+" autocmd BufWritePre * :%s/\s\+$//e
 
 " This hack allows the use of <c-l> inside of netrw !!
 augroup netrw_mapping
@@ -124,7 +103,7 @@ function! NetrwMapping()
   nnoremap <buffer> <c-l> :wincmd l<cr>
 endfunction
 
-"Bind C-movement to move accross windows
+" Bind C-movement to move accross windows
 " map <c-j> <c-w>j
 " map <c-k> <c-w>k
 " map <c-h> <c-w>h
@@ -136,7 +115,7 @@ endfunction
 " 	tmap <c-l> <c-w>l
 " endif
 
-"following remapping highly inspired by tpope/vim-unimpaired
+" following remapping highly inspired by tpope/vim-unimpaired
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
@@ -165,7 +144,7 @@ nnoremap <silent> ]T :tlast<CR>
 " select last pasted content
 nnoremap gp `[v`]
 
-"Highlight current line
+" Highlight current line
 set cursorline
 hi cursorline cterm=none term=none
 autocmd WinEnter * setlocal cursorline
@@ -177,38 +156,53 @@ highlight CursorLine guibg=#303000 ctermbg=234
 	"\ }
 set laststatus=2
 
-"Set colorscheme
-"colorscheme onedark
+" Set colorscheme
+" colorscheme onedark
 colorscheme gruvbox
 
-"Mardown Live Preview
+" Mardown Live Preview
 nmap gM :LivedownToggle<CR>
 
-"FZF parameters
+" FZF parameters
 "
 let $FZF_DEFAULT_COMMAND='rg --files --hidden'
-let $FZ_DEFAULT_OPTS="--height 40% --layout=reverse --preview"
-			\"'(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
+let $FZ_DEFAULT_OPTS="--height 40% --layout=reverse --preview
+			\'(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
 
-nnoremap <leader>ff :Files<CR>
-nnoremap <leader>fi :Ag<CR>
-nnoremap <leader>fa :Ag<CR>
-nnoremap <leader>fr :Rg<CR>
-nnoremap <leader>fz :FZF<CR>
-nnoremap <leader>fg :GFiles<CR>
-nnoremap <leader>fh :History<CR>
-nnoremap <leader>fb :Buffers<CR>
+" nnoremap <leader>ff :Files<CR>
+" nnoremap <leader>fi :Ag<CR>
+" nnoremap <leader>fa :Ag<CR>
+" nnoremap <leader>fr :Rg<CR>
+" nnoremap <leader>fz :FZF<CR>
+" nnoremap <leader>fh :History<CR>
+" nnoremap <leader>fb :Buffers<CR>
+" nnoremap <leader>fg :GFiles<CR>
+
+nnoremap <leader>fg <cmd>Telescope git_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fi <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 
 nnoremap <leader>json :%!python3 -m json.tool<CR>
+nnoremap J mzJ`z
+
+xnoremap <leader>p "_dP
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nmap <leader>Y "+y
+
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
 
 
-"Snippet templates shortcuts
-"
-nnoremap <leader>html :-1read ~/.vim/template/html/skeleton.html<CR>3jcit
-nnoremap <leader>main :-1read ~/.vim/template/python/main.py<CR>2j$
-nnoremap <leader>props "zdaw:-1read 
-			\ ~/.vim/template/python/props.py<CR>:%s/_{}_/<c-r>z/g<CR>
+
+" Snippet templates shortcuts
+" nnoremap <leader>html :-1read ~/.vim/template/html/skeleton.html<CR>3jcit
+" nnoremap <leader>main :-1read ~/.vim/template/python/main.py<CR>2j$
+" nnoremap <leader>props "zdaw:-1read 
+" 			\ ~/.vim/template/python/props.py<CR>:%s/_{}_/<c-r>z/g<CR>
 
 cmap w!! !sudo tee %
 
