@@ -12,13 +12,13 @@ call plug#begin()
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-commentary'
 Plug 'simeji/winresizer'
 Plug 'tpope/vim-sleuth'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-angular'
+Plug 'numToStr/Comment.nvim'
 
 Plug 'airblade/vim-gitgutter'     " Show git diff of lines edited
 Plug 'tpope/vim-fugitive'         " :Gblame
@@ -243,9 +243,9 @@ nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 " nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
 
- nnoremap <leader>l1 :LspInstall<CR>
- nnoremap <leader>l2 :LspUninstall<CR>
- nnoremap <leader>lS :LspInfo<CR>
+nnoremap <leader>l1 :LspInstall<CR>
+nnoremap <leader>l2 :LspUninstall<CR>
+nnoremap <leader>lS :LspInfo<CR>
 
 lua << EOF
 
@@ -341,4 +341,7 @@ lsp_installer.on_server_ready(function(server)
     }
   server:setup(opts) 
 end)
+
+require('Comment').setup()
+
 EOF
