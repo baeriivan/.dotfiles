@@ -1,0 +1,17 @@
+#lazy shortcuts
+alias ll='ls -lArth'
+alias ..='cd ..'
+alias cd..='cd ..'
+alias ...='cd ../..'
+alias cd ...='cd ../..'
+alias cd...='cd ../..'
+alias ....='cd ../../..'
+alias cd ....='cd ../../..'
+alias rm='rm --preserve-root'
+alias mv='mv -i'
+
+alias nv='nvim'
+alias vi='nvim'
+alias vim='nvim'
+alias pdf='apvlv'
+alias todo='kabmat'
