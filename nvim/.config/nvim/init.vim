@@ -54,10 +54,9 @@ Plug 'hrsh7th/cmp-vsnip'
 
 call plug#end() " ------------------------------------------------------------
 
-" Plugin for matching HTML tags using %
-" already built in vim, just need to activate
+" Plugin for matching HTML tags using % already built in vim, just need to
+" activate
 packadd! matchit
-
 
 set tabstop=2
 set shiftwidth=0 "follow tabstop
@@ -72,16 +71,11 @@ set scrolloff=4 "start scrolling `n` lines before the top/bottom
 set incsearch "show search result on the fly
 set nohlsearch "set noh "to toggle off current highlight
 set termguicolors
-" set clipboard=unnamedplus
 set splitbelow splitright "open on right and bottom as default
-" set thesaurus+=/home/bbaga/Documents/mthesaur.txt "set thresaurus <C-X><C-T>
 set omnifunc=syntaxcomplete#Complete
-" set completeopt=menuone,noinsert,noselect,preview
-set completeopt=menu,menuone,noinsert
-" set omnifunc=lsp#complete
+set completeopt=menu,menuone,noinsert "noselect, preview
 set hidden
 
-" set nowrap "does not unwrap if line are too long
 " set noswapfile
 " set nobackup
 set backspace=indent,eol,start
@@ -145,6 +139,11 @@ nnoremap <silent> ]t :tnext<CR>
 nnoremap <silent> [T :tfirst<CR>
 nnoremap <silent> ]T :tlast<CR>
 
+nnoremap <silent> <leader>c] :cclose<cr>
+nnoremap <silent> <leader>c[ :copen<cr>
+nnoremap <silent> <leader>l] :lclose<cr>
+nnoremap <silent> <leader>l[ :lopen<cr>
+
 " select last pasted content
 nnoremap gp `[v`]
 
@@ -155,13 +154,8 @@ autocmd WinEnter * setlocal cursorline
 autocmd WinLeave * setlocal nocursorline
 highlight CursorLine guibg=#303000 ctermbg=234
 
-" let g:lightline = {
-	"\ 'colorscheme': 'onedark',
-	"\ }
 set laststatus=2
 
-" Set colorscheme
-" colorscheme onedark
 colorscheme gruvbox
 
 " HEXOKINASE <Alt-C>
@@ -189,7 +183,7 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 
-nnoremap <leader>json :%!python3 -m json.tool<CR>
+nnoremap <leader>SO :windo source $MYVIMRC<cr>
 nnoremap J mzJ`z
 
 xnoremap <leader>p "_dP
@@ -203,50 +197,53 @@ vnoremap <leader>d "_d
 cmap w!! !sudo tee %
 
 " vim-vsnip -----------------------------------------------------------------
-"
-" Expand
-" imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-" smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
 
+let g:vsnip_snippet_dir = expand('~/.config/nvim/vsnip')
+let g:vsnip_snippet_dirs = [
+      \ expand('~/.config/nvim/vsnip'),
+      \ expand('~/.config/nvim/vsnip/javascript'),
+      \ expand('~/.config/nvim/vsnip/latex'),
+      \ expand('~/.config/nvim/vsnip/python')
+      \ ]
+let g:vsnip_filetypes = {}
+let g:vsnip_filetypes.scss = ['css']
+let g:vsnip_filetypes.javascriptreact = ['javascript']
+let g:vsnip_filetypes.typescriptreact = ['typescript']
+
+nnoremap <silent> <leader>sn :VsnipOpen<cr>
+
+" Expand
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'    : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'    : '<C-j>'
 
 " Expand or jump
-" imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-" smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-" imap <expr> <C-j>   vsnip#available(1)  ? '<Plug>(vsnip-expand)'         : '<C-j>'
-" imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-" smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+imap <expr> <C-l> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+imap <expr> <C-j> vsnip#available(1)  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+imap <expr> <C-l> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l> vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
 
 " Jump forward or backward
-" imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-" smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-" imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-" smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-
-" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
-" See https://github.com/hrsh7th/vim-vsnip/pull/50
-" nmap        s   <Plug>(vsnip-select-text)
-" xmap        s   <Plug>(vsnip-select-text)
-" nmap        S   <Plug>(vsnip-cut-text)
-" xmap        S   <Plug>(vsnip-cut-text)
-
-" If you want to use snippet for multiple filetypes, you can `g:vsnip_filetypes` for it.
-" let g:vsnip_filetypes = {}
-" let g:vsnip_filetypes.javascriptreact = ['javascript']
-" let g:vsnip_filetypes.typescriptreact = ['typescript']
+imap <expr> <C-n> vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'    : '<C-n>'
+smap <expr> <C-n> vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'    : '<C-n>'
+imap <expr> <C-p> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'    : '<C-p>'
+smap <expr> <C-p> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'    : '<C-p>'
 
 " TMUX VIM movements --------------------------------------------------------
+
 let g:tmux_navigator_no_mappings = 1
 
 nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
-" nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
 
 nnoremap <leader>l1 :LspInstall<CR>
 nnoremap <leader>l2 :LspUninstall<CR>
-nnoremap <leader>lS :LspInfo<CR>
+nnoremap <leader>ls :LspInfo<CR>
+nnoremap <leader>lS :LspInstallInfo<CR>
 
+" ============================================================================
 lua << EOF
 
 local opts = { noremap=true, silent=true }
@@ -281,63 +278,63 @@ require'nvim-treesitter.configs'.setup {
 
 local cmp = require'cmp'
 
-cmp.setup {
-  completion = {
-    autocomplete = false, -- disable auto-completion.
-  },
-}
-
-_G.vimrc = _G.vimrc or {}
-_G.vimrc.cmp = _G.vimrc.cmp or {}
-_G.vimrc.cmp.lsp = function()
-  cmp.complete({
-    config = {
-      sources = {
-        { name = 'nvim_lsp' }
-      }
-    }
-  })
-end
-_G.vimrc.cmp.snippet = function()
-  cmp.complete({
-    config = {
-      sources = {
-        { name = 'vsnip' }
-      }
-    }
-  })
-end
-
-vim.cmd([[
-  inoremap <C-x><C-o> <Cmd>lua vimrc.cmp.lsp()<CR>
-  inoremap <C-x><C-s> <Cmd>lua vimrc.cmp.snippet()<CR>
-]])
--- cmp.setup({
---   snippet = {
---     expand = function(args)
---       vim.fn["vsnip#anonymous"](args.body)
---     end,
+-- cmp.setup {
+--   completion = {
+--     autocomplete = false, -- disable auto-completion.
 --   },
---   mapping = {
---     ['<C-p>'] = cmp.mapping.select_prev_item(),
---     ['<C-n>'] = cmp.mapping.select_next_item(),
---     ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
---     ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
---     ['<C-m>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
---     ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
---     ['<C-e>'] = cmp.mapping({
---       i = cmp.mapping.abort(),
---       c = cmp.mapping.close(),
---     }),
---     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
---   },
---   sources = cmp.config.sources({
---     { name = 'nvim_lsp' },
---     { name = 'vsnip' },
---     { name = 'buffer' },
---     { name = 'path' },
+-- }
+--
+-- _G.vimrc = _G.vimrc or {}
+-- _G.vimrc.cmp = _G.vimrc.cmp or {}
+-- _G.vimrc.cmp.lsp = function()
+--   cmp.complete({
+--     config = {
+--       sources = {
+--         { name = 'nvim_lsp' }
+--       }
+--     }
 --   })
--- })
+-- end
+-- _G.vimrc.cmp.snippet = function()
+--   cmp.complete({
+--     config = {
+--       sources = {
+--         { name = 'vsnip' }
+--       }
+--     }
+--   })
+-- end
+--
+-- vim.cmd([[
+--   inoremap <C-x><C-o> <Cmd>lua vimrc.cmp.lsp()<CR>
+--   inoremap <C-x><C-s> <Cmd>lua vimrc.cmp.snippet()<CR>
+-- ]])
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-m>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+    ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+    ['<C-e>'] = cmp.mapping({
+      i = cmp.mapping.abort(),
+      c = cmp.mapping.close(),
+    }),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'buffer' },
+    { name = 'path' },
+  })
+})
 
 -- Set configuration for specific filetype.
 -- cmp.setup.filetype('gitcommit', {
@@ -375,3 +372,4 @@ end)
 require('Comment').setup()
 
 EOF
+" ============================================================================
