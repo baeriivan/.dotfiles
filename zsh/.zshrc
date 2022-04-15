@@ -106,4 +106,10 @@ export PATH=$PATH:$HOME/.local/bin
 
 # Jump integration to shell
 eval "$(jump shell)"
+# Rewrite the jump function to show the whole path `pwd` on jump
+j() {
+  local dir="$(jump cd $@)"
+  test -d "$dir" && cd "$dir" && pwd
+}
+
 export PATH="$PATH:/opt/mssql-tools/bin"

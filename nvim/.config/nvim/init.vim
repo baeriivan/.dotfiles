@@ -203,12 +203,15 @@ let g:vsnip_snippet_dirs = [
       \ expand('~/.config/nvim/vsnip'),
       \ expand('~/.config/nvim/vsnip/javascript'),
       \ expand('~/.config/nvim/vsnip/latex'),
-      \ expand('~/.config/nvim/vsnip/python')
+      \ expand('~/.config/nvim/vsnip/python'),
+      \ expand('~/.config/nvim/vsnip/frameworks')
       \ ]
 let g:vsnip_filetypes = {}
 let g:vsnip_filetypes.scss = ['css']
 let g:vsnip_filetypes.javascriptreact = ['javascript']
 let g:vsnip_filetypes.typescriptreact = ['typescript']
+let g:vsnip_filetypes.ruby = ['rails']
+let g:vsnip_filetypes.markdown = ['jekyll']
 
 nnoremap <silent> <leader>sn :VsnipOpen<cr>
 
@@ -256,7 +259,7 @@ local on_attach = function ()
   vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   -- vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   vim.api.nvim_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  -- vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   vim.api.nvim_set_keymap('n', '<leader>wd', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   vim.api.nvim_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
