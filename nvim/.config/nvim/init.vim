@@ -34,16 +34,16 @@ Plug 'morhetz/gruvbox'
 
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'shime/vim-livedown' "needs : npm install -g livedown
-
+Plug 'onsails/lspkind-nvim'
 Plug 'baeriivan/ng-file-alternate-vim'
 
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
-" lspkind-nvim
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
@@ -178,6 +178,7 @@ let $FZ_DEFAULT_OPTS="--height 40% --layout=reverse --preview
 
 nnoremap <leader>fg <cmd>Telescope git_files<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fa <cmd>Telescope find_files no_ignore=true<cr>
 nnoremap <leader>fi <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
@@ -195,6 +196,11 @@ nnoremap <leader>d "_d
 vnoremap <leader>d "_d
 
 cmap w!! !sudo tee %
+
+augroup highlight_yank
+  autocmd!
+  au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=300}
+augroup END
 
 " vim-vsnip -----------------------------------------------------------------
 
@@ -249,9 +255,22 @@ nnoremap <leader>lS :LspInstallInfo<CR>
 " ============================================================================
 lua << EOF
 
+-- Easily toggle the LSP diagnostics
+vim.g.diagnostics_active = true
+_G.toggle_diagnostics = function()
+  if vim.g.diagnostics_active then
+    vim.diagnostic.hide()
+    vim.g.diagnostics_active = false
+  else
+    vim.diagnostic.show()
+    vim.g.diagnostics_active = true
+  end
+end
+
 local opts = { noremap=true, silent=true }
 local on_attach = function () 
   vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '<leader>tt', '<cmd>lua toggle_diagnostics()<CR>', opts)
   vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
   vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
@@ -270,6 +289,8 @@ local on_attach = function ()
   vim.api.nvim_set_keymap('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
+require('telescope').load_extension('fzf')
+
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
 
@@ -278,6 +299,8 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = false,
   },
 }
+
+local lspkind = require('lspkind')
 
 local cmp = require'cmp'
 
@@ -312,7 +335,21 @@ local cmp = require'cmp'
 --   inoremap <C-x><C-o> <Cmd>lua vimrc.cmp.lsp()<CR>
 --   inoremap <C-x><C-s> <Cmd>lua vimrc.cmp.snippet()<CR>
 -- ]])
+
 cmp.setup({
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol', -- show only symbol annotations
+      maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+
+      -- The function below will be called before any actual modifications from lspkind
+      -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+      -- before = function (entry, vim_item)
+      --   ...
+      --   return vim_item
+      -- end
+    })
+  },
   snippet = {
     expand = function(args)
       vim.fn["vsnip#anonymous"](args.body)

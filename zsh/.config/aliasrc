@@ -1,5 +1,4 @@
-#lazy shortcuts
-alias ll='ls -lArth'
+# alias ll='ls -lArth'
 alias ..='cd ..'
 alias cd..='cd ..'
 alias ...='cd ../..'
@@ -7,8 +6,14 @@ alias cd ...='cd ../..'
 alias cd...='cd ../..'
 alias ....='cd ../../..'
 alias cd ....='cd ../../..'
+alias cd-='cd -'
 alias rm='rm --preserve-root'
 alias mv='mv -i'
+
+alias l='exa'
+alias ll='exa --long'
+alias bat='batcat'
+alias fd='fdfind'
 
 alias nv='nvim'
 alias vi='nvim'
