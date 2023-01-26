@@ -37,6 +37,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'shime/vim-livedown' "needs : npm install -g livedown
+"Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 Plug 'onsails/lspkind-nvim'
 Plug 'baeriivan/ng-file-alternate-vim'
 
@@ -51,6 +52,13 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-vsnip'
 " Plug 'hrsh7th/vim-vsnip-integ'
+
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
+Plug 'mfussenegger/nvim-dap-python'
+
+" Plug 'github/copilot.vim'
 
 call plug#end() " ------------------------------------------------------------
 
@@ -76,6 +84,8 @@ set omnifunc=syntaxcomplete#Complete
 set completeopt=menu,menuone,noinsert "noselect, preview
 set hidden
 
+set formatoptions=tcqr
+
 " set noswapfile
 " set nobackup
 set backspace=indent,eol,start
@@ -93,7 +103,9 @@ set wildignore+=**/.git/*
 set wildignore+=*.pyc
 set wildignore+=*_build/*
 
-let mapleader = ","
+let mapleader = " "
+
+let g:ng_file_alternate_stylefiletype = ".scss"
 
 " SETUP FOR NETRW plugin
 let g:netrw_banner=0
@@ -251,6 +263,14 @@ nnoremap <leader>l1 :LspInstall<CR>
 nnoremap <leader>l2 :LspUninstall<CR>
 nnoremap <leader>ls :LspInfo<CR>
 nnoremap <leader>lS :LspInstallInfo<CR>
+
+" vim-latex-live-preview " ----------------------------------------------------
+
+"let g:livepreview_previewer = 'okular'
+"let g:livepreview_engine = 'pdflatex' . ' -pdf' "xelatex
+"let g:livepreview_cursorhold_recompile = 0
+
+"nnoremap <leader>lx :LLPStartPreview
 
 " ============================================================================
 lua << EOF
@@ -410,6 +430,63 @@ lsp_installer.on_server_ready(function(server)
 end)
 
 require('Comment').setup()
+
+local ok, dap = pcall(require, "dap")
+if not ok then return end
+require("dapui").setup()
+require("nvim-dap-virtual-text").setup()
+require('dap-python').setup("/home/bai/envs/debugpy/bin/python")
+
+local dap = require('dap')
+-- dap.adapters.python = {
+--   type = 'executable';
+--   command = '/home/bai/envs/debugpy/bin/python';
+--   args = { '-m', 'debugpy.adapter' };
+-- }
+dap.adapters.node2 = {
+  type = 'executable',
+  command = 'node',
+  args = {os.getenv('HOME') .. '/vscode-node-debug2/out/src/nodeDebug.js'},
+}
+dap.configurations.typescript = {
+  {
+    name = 'Launch',
+    type = 'node2',
+    request = 'launch',
+    program = '${file}',
+    cwd = vim.fn.getcwd(),
+    sourceMaps = true,
+    protocol = 'inspector',
+    console = 'integratedTerminal',
+    outFiles = {"${workspaceFolder}/build/**/*.js"},
+  },
+  {
+    -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+    name = 'Attach to process',
+    type = 'node2',
+    request = 'attach',
+    processId = require'dap.utils'.pick_process,
+  },
+}
+
+vim.keymap.set("n", "<F4>", ":lua require'dapui'.open()<CR>")
+vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
+vim.keymap.set("n", "<F6>", ":lua require'dap'.step_over()<CR>")
+vim.keymap.set("n", "<F7>", ":lua require'dap'.step_into()<CR>")
+vim.keymap.set("n", "<F8>", ":lua require'dap'.step_out()<CR>")
+vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
+vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))()<CR>")
+
+local dap, dapui = require("dap"), require("dapui")
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
 
 EOF
 " ============================================================================

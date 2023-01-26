@@ -1,3 +1,6 @@
-setlocal tabstop=4
-setlocal shiftwidth=0 "follow tabstop
-setlocal softtabstop=-1 "follow shiftwidth
+au Filetype python set
+      \ tabstop=4
+      \ shiftwidth=0
+      \ softtabstop=-1
+" shiftwidth to 0 >> follow tabstop
+" softtabstop= =1 >> follow shiftwidth
