@@ -113,3 +113,28 @@ j() {
 }
 
 export PATH="$PATH:/opt/mssql-tools/bin"
+
+# set brave as chrome for ng test
+export CHROME_BIN="/usr/bin/brave-browser"
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
+
+export PATH=$PATH:$HOME/bin/miniconda3/bin
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/bai/bin/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/bai/bin/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/bai/bin/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/bai/bin/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

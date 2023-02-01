@@ -12,11 +12,22 @@ alias mv='mv -i'
 
 alias l='exa'
 alias ll='exa --long'
+alias lt='exa --long --reverse --sort=modified'
 alias bat='batcat'
 alias fd='fdfind'
+
+alias jpp='python -m json.tool | bat --language json'
+alias tn='tmux new -s'
+alias ta='tmux attach'
 
 alias nv='nvim'
 alias vi='nvim'
 alias vim='nvim'
 alias pdf='apvlv'
-alias todo='kabmat'
+# alias todo='kabmat'
+alias todo='nvim /home/bai/workspace/TODO.txt'
+alias nval='nvim /home/bai/.dotfiles/zsh/.config/aliasrc'
+alias w32='WINEPREFIX=~/.local/share/wineprefixes/i32 WINARCH="win32"'
+
+alias aimsun='~/bin/Aimsun_Next_22/Aimsun_Next'
+alias obb='conda activate obb;openbb'
