@@ -14,7 +14,6 @@ Plug 'numToStr/Comment.nvim'
 
 Plug 'airblade/vim-gitgutter'     " Show git diff of lines edited
 Plug 'tpope/vim-fugitive'         " :Gblame
-Plug 'tpope/vim-rhubarb'          " :GBrowse
 
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
@@ -29,8 +28,8 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'shime/vim-livedown' "needs : npm install -g livedown
-"Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-Plug 'onsails/lspkind-nvim'
+" Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+" Plug 'onsails/lspkind-nvim' "pretty symbols
 Plug 'baeriivan/ng-file-alternate-vim'
 
 Plug 'neovim/nvim-lspconfig'
@@ -180,6 +179,7 @@ nnoremap <leader>fi <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
+nnoremap <C-p> :Ex<cr>
 
 nnoremap <leader>SO :windo source $MYVIMRC<cr>
 nnoremap J mzJ`z
