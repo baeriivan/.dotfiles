@@ -29,7 +29,7 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'shime/vim-livedown' "needs : npm install -g livedown
 " Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
-" Plug 'onsails/lspkind-nvim' "pretty symbols
+Plug 'onsails/lspkind-nvim' "pretty symbols
 Plug 'baeriivan/ng-file-alternate-vim'
 
 Plug 'neovim/nvim-lspconfig'
@@ -41,9 +41,14 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/cmp-nvim-lua'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-vsnip'
-" Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'hrsh7th/vim-vsnip-integ'
+" Plug 'saadparwaiz1/cmp_luasnip'
+" Plug 'L3MON4D3/LuaSnip'
+" Plug 'rafamadriz/friendly-snippets'
+
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
 
 Plug 'mfussenegger/nvim-dap'
@@ -54,6 +59,8 @@ Plug 'mfussenegger/nvim-dap-python'
 " Plug 'github/copilot.vim'
 
 call plug#end() " ------------------------------------------------------------
+
+packadd! cfilter
 
 set tabstop=2
 set shiftwidth=0 "follow tabstop
@@ -94,7 +101,7 @@ set wildignore+=*_build/*
 
 let mapleader = " "
 
-let g:ng_file_alternate_stylefiletype = ".css"
+let g:ng_file_alternate_stylefiletype = ".scss"
 
 " SETUP FOR NETRW plugin
 let g:netrw_banner=0
@@ -256,5 +263,10 @@ nnoremap <leader>lS :LspInstallInfo<CR>
 "let g:livepreview_cursorhold_recompile = 0
 
 "nnoremap <leader>lx :LLPStartPreview
+
+" -----------------------------------------------------------------------------
+
+nnoremap <silent> <leader>TT :!tree -d -I node_modules<cr>
+nnoremap <silent> <leader>TA :!tree -I node_modules<cr>
 
 lua require("baeriivan")

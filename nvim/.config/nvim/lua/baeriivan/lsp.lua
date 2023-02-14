@@ -10,8 +10,10 @@ _G.toggle_diagnostics = function()
   end
 end
 
-local opts = { noremap=true, silent=true }
+
 local on_attach = function ()
+  local opts = { noremap=true, silent=true }
+
   vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   vim.api.nvim_set_keymap('n', '<leader>tt', '<cmd>lua toggle_diagnostics()<CR>', opts)
   vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
@@ -29,82 +31,76 @@ local on_attach = function ()
   vim.api.nvim_set_keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.api.nvim_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  -- vim.api.nvim_set_keymap('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   vim.keymap.set('n', '<leader>=', function() vim.lsp.buf.format { async = true } end, opts)
-
 end
+
 
 local lsp = require("lsp-zero")
-lsp.preset('recommended')
-
-lsp.configure('sumneko_lua', {
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { 'vim' }
-      }
-    }
-  }
+lsp.extend_lspconfig({
+  set_lsp_keymaps = false,
+  on_attach = on_attach,
 })
 
--- local lspkind = require('lspkind')
-local cmp = require('cmp')
 
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
-    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+require('mason').setup()
+require('mason-lspconfig').setup()
+
+require('mason-lspconfig').setup_handlers({
+  function(server_name)
+    require('lspconfig')[server_name].setup({})
+  end,
+  ['sumneko_lua'] = function()
+    require('lspconfig').sumneko_lua.setup({
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { 'vim' }
+          }
+        }
+      }
+  })
+  end
+})
+
+
+local lspkind = require('lspkind')
+lsp.set_sign_icons()
+vim.diagnostic.config(lsp.defaults.diagnostics({}))
+
+
+local cmp = require('cmp')
+local cmp_config = lsp.defaults.cmp_config({})
+
+cmp_config = {
+  mapping = ({
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-u>'] = cmp.mapping.scroll_docs(4),
-    ['<C-m>'] = cmp.mapping(cmp.mapping.complete()),
-    ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-})
+    ['<C-m>'] = cmp.mapping.complete(),
+    ['<C-y>'] = vim.NIL,
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+  }),
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol_text',
+      maxwidth = 50,
+    })
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' },
+    { name = 'path' },
+    { name = 'buffer' },
+  },
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+}
 
-lsp.set_preferences({
-  sign_icons = {}
-})
-
-
-local sign = function(opts)
-  vim.fn.sign_define(opts.name, {
-    texthl = opts.name,
-    text = opts.text,
-    numhl = ''
-  })
-end
-
-sign({name = 'DiagnosticSignError', text = '✘'})
-sign({name = 'DiagnosticSignWarn', text = '▲'})
-sign({name = 'DiagnosticSignHint', text = '⚑'})
-sign({name = 'DiagnosticSignInfo', text = ''})
-
-
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
-})
-
-lsp.on_attach = on_attach()
-
-lsp.setup()
--- cmp.setup({
---   formatting = {
---     format = lspkind.cmp_format({
---       mode = 'symbol',
---       maxwidth = 50,
---     })
---   },
---   snippet = {
---     expand = function(args)
---       vim.fn["vsnip#anonymous"](args.body)
---     end,
---   },
---   mapping = {
---   },
---   sources = cmp.config.sources({
---     { name = 'nvim_lsp' },
---     { name = 'vsnip' },
---     { name = 'path' },
---     { name = 'buffer' },
---   })
--- })
+cmp.setup(cmp_config)
