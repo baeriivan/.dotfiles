@@ -54,7 +54,8 @@ Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'theHamsta/nvim-dap-virtual-text'
-Plug 'mfussenegger/nvim-dap-python'
+" Plug 'mfussenegger/nvim-dap-python'
+Plug 'mortepau/codicons.nvim'
 
 " Plug 'github/copilot.vim'
 
@@ -254,7 +255,7 @@ nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
 nnoremap <leader>l1 :LspInstall<CR>
 nnoremap <leader>l2 :LspUninstall<CR>
 nnoremap <leader>ls :LspInfo<CR>
-nnoremap <leader>lS :LspInstallInfo<CR>
+nnoremap <leader>lS :Mason<CR>
 
 " vim-latex-live-preview " ----------------------------------------------------
 
