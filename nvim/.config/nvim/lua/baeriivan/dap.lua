@@ -84,9 +84,18 @@ dap.configurations.typescript = {
     request = "attach",
     program = "${file}",
     cwd = vim.fn.getcwd(),
-    sourceMaps = true,
+    -- sourceMaps = true,
     protocol = "inspector",
+    port = 9229,
   },
+  -- {
+  --   type = "node2",
+  --   name = "Attach to url with files served from ./out",
+  --   request = "attach",
+  --   port = 9229,
+  --   url = "localhost:4200/",
+  --   webRoot = "${workspaceFolder}/out"
+  -- },
   -- {
     --
     -- name = 'Ng launch',
@@ -138,9 +147,9 @@ local dapui = require("dapui")
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
 end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
+-- dap.listeners.before.event_terminated["dapui_config"] = function()
+--   dapui.close()
+-- end
+-- dap.listeners.before.event_exited["dapui_config"] = function()
+--   dapui.close()
+-- end

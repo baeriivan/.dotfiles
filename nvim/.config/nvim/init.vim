@@ -104,6 +104,11 @@ let mapleader = " "
 
 let g:ng_file_alternate_stylefiletype = ".scss"
 
+nnoremap <silent> <leader>hh :NgFileAltenativeGoToHTML<cr>
+nnoremap <silent> <leader>jj :NgFileAltenativeGoToScript<cr>
+nnoremap <silent> <leader>kk :NgFileAltenativeGoToTest<cr>
+nnoremap <silent> <leader>ll :NgFileAltenativeGoToStyle<cr>
+
 " SETUP FOR NETRW plugin
 let g:netrw_banner=0
 let g:netrw_list_hide='.*\.swp$'
