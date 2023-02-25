@@ -79,10 +79,6 @@ cmp_config = {
     ['<C-u>'] = cmp.mapping.scroll_docs(4),
     ['<C-m>'] = cmp.mapping.complete(),
     ['<C-y>'] = vim.NIL,
-    -- ['<CR>'] = cmp.mapping.confirm {
-    --   behavior = cmp.ConfirmBehavior.Replace,
-    --   select = true,
-    -- },
     ['<CR>'] = function(fallback)
       if cmp.visible() then
         cmp.confirm()

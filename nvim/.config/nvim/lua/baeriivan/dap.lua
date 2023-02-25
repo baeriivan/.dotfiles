@@ -1,51 +1,32 @@
 local ok, dap = pcall(require, "dap")
 if not ok then return end
 
-
 local codicons = require('codicons')
 
--- codicons.setup({
---   -- Override by mapping name to icon
---   -- ['account'] = '',
---   -- Or by name to hexadecimal/decimal value
---   ['comment'] = 0xEA6B, -- hexadecimal
---   ['archive'] = 60056, -- decimal
--- })
+local dapui = require("dapui")
 
+dapui.setup({
+  controls = {
+    icons = {
+      -- disconnect = codicons.get('debug-disconnect', 'icon'),
+      pause = "",
+      play = "",
+      run_last = "",
+      step_back = "",
+      step_into = "",
+      step_out = "",
+      step_over = "",
+      terminate = ""
+    }
+  },
+  icons = {
+    collapsed = "",
+    current_frame = "",
+    expanded = ""
+  },
 
--- codicons.setup({
---   controls = {
---     icons = {
---       disconnect = codicons.get('debug-disconnect', 'icon'),
---       pause = codicons.get('debug-pause', 'icon'),
---       play = codicons.get('debug-start', 'icon'),
---       run_last = codicons.get('debug-restart', 'icon'),
---       step_back = codicons.get('debug-step-back', 'icon'),
---       step_into = codicons.get('debug-step-into', 'icon'),
---       step_out = codicons.get('debug-step-out', 'icon'),
---       step_over = codicons.get('debug-step-over', 'icon'),
---       terminate = codicons.get('debug-stop', 'icon')
---       --
---       -- disconnect = codicons.get('play', 'unicode'),
---       -- pause = "",
---       -- play = "",
---       -- run_last = "",
---       -- step_back = "",
---       -- step_into = "",
---       -- step_out = "",
---       -- step_over = "",
---       -- terminate = codicons.get('debug-stop', 'unicode')
---     }
---   },
---   -- icons = {
---     -- collapsed = "",
---     -- current_frame = "",
---     -- expanded = ""
---   -- },
---
--- })
+})
 
-require("dapui").setup()
 require("nvim-dap-virtual-text").setup()
 
 
@@ -143,7 +124,6 @@ vim.keymap.set("n", "<F8>", ":lua require'dap'.step_out()<CR>")
 vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
 vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))()<CR>")
 
-local dapui = require("dapui")
 dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open()
 end
