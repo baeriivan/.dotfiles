@@ -2,8 +2,8 @@ require('telescope').load_extension('fzf')
 
 require('Comment').setup()
 
-require('baeriivan.lsp')
+require('after.plugin.lsp')
 
-require('baeriivan.treesitter')
+require('after.plugin.treesitter')
 
-require('baeriivan.dap')
+require('after.plugin.dap')

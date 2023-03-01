@@ -71,22 +71,20 @@ vim.diagnostic.config(lsp.defaults.diagnostics({}))
 local cmp = require('cmp')
 local cmp_config = lsp.defaults.cmp_config({})
 
+local cmp_select = {behavior = cmp.SelectBehavior.Select}
+local cmp_mappings = lsp.defaults.cmp_mappings({
+  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+  ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+  ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+  ['<C-u>'] = cmp.mapping.scroll_docs(4),
+  ['<CR>'] = cmp.mapping.confirm(),
+})
+cmp_mappings['<Tab>'] = nil
+cmp_mappings['<S-Tab>'] = nil
+
 cmp_config = {
-  mapping = ({
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-u>'] = cmp.mapping.scroll_docs(4),
-    ['<C-m>'] = cmp.mapping.complete(),
-    ['<C-y>'] = vim.NIL,
-    ['<CR>'] = function(fallback)
-      if cmp.visible() then
-        cmp.confirm()
-      else
-        fallback()
-      end
-    end
-  }),
+  mapping = cmp_mappings,
   formatting = {
     format = lspkind.cmp_format({
       mode = 'symbol_text',
