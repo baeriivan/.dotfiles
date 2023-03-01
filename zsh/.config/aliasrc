@@ -29,5 +29,6 @@ alias todo='nvim /home/bai/workspace/TODO.txt'
 alias nval='nvim /home/bai/.dotfiles/zsh/.config/aliasrc'
 alias w32='WINEPREFIX=~/.local/share/wineprefixes/i32 WINARCH="win32"'
 
-alias aimsun='~/bin/Aimsun_Next_22/Aimsun_Next'
+# alias aimsun='~/bin/Aimsun_Next_22/Aimsun_Next'
 alias obb='conda activate obb;openbb'
+alias dbg='brave-browser --user-data-dir=/tmp/chrome-debug --remote-debugging-port=9229'
