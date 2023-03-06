@@ -138,3 +138,5 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Add fzf installed via nvim to path
+export PATH=$PATH:$HOME/.local/share/nvim/plugged/fzf/bin
