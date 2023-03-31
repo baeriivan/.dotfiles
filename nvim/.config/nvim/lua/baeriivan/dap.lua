@@ -65,9 +65,10 @@ dap.configurations.typescript = {
     request = "attach",
     program = "${file}",
     cwd = vim.fn.getcwd(),
-    -- sourceMaps = true,
+    sourceMaps = true,
     protocol = "inspector",
     port = 9229,
+    processId = require'dap.utils'.pick_process,
   },
   -- {
   --   type = "node2",

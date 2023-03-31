@@ -20,6 +20,7 @@ Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'KabbAmine/vCoolor.vim'
 Plug 'godlygeek/tabular'
 Plug 'mattn/emmet-vim'
+Plug 'jiangmiao/auto-pairs'
 
 Plug 'morhetz/gruvbox'
 
@@ -45,16 +46,12 @@ Plug 'hrsh7th/cmp-nvim-lua'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
-" Plug 'saadparwaiz1/cmp_luasnip'
-" Plug 'L3MON4D3/LuaSnip'
-" Plug 'rafamadriz/friendly-snippets'
 
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
 
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'theHamsta/nvim-dap-virtual-text'
-" Plug 'mfussenegger/nvim-dap-python'
 Plug 'mortepau/codicons.nvim'
 
 " Plug 'github/copilot.vim'
