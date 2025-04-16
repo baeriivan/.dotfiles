@@ -21,6 +21,7 @@ Plug 'KabbAmine/vCoolor.vim'
 Plug 'godlygeek/tabular'
 Plug 'mattn/emmet-vim'
 Plug 'jiangmiao/auto-pairs'
+Plug 'preservim/nerdtree'
 
 Plug 'morhetz/gruvbox'
 
@@ -28,7 +29,8 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
-Plug 'shime/vim-livedown' "needs : npm install -g livedown
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+" Plug 'shime/vim-livedown' "needs : npm install -g livedown
 " Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 Plug 'onsails/lspkind-nvim' "pretty symbols
 Plug 'baeriivan/ng-file-alternate-vim'
@@ -47,13 +49,17 @@ Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 
+" Plug 'Jezda1337/nvim-html-css'
+
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
 
-Plug 'mfussenegger/nvim-dap'
-Plug 'rcarriga/nvim-dap-ui'
-Plug 'theHamsta/nvim-dap-virtual-text'
+" Plug 'mfussenegger/nvim-dap'
+" Plug 'nvim-neotest/nvim-nio'
+" Plug 'rcarriga/nvim-dap-ui'
+" Plug 'theHamsta/nvim-dap-virtual-text'
 Plug 'mortepau/codicons.nvim'
 
+Plug 'supermaven-inc/supermaven-nvim'
 " Plug 'github/copilot.vim'
 
 call plug#end() " ------------------------------------------------------------
@@ -173,8 +179,9 @@ colorscheme gruvbox
 let g:Hexokinase_highlighters = ['virtual']
 let g:vcoolor_lowercase = 1
 
-" Mardown Live Preview
-nmap gM :LivedownToggle<CR>
+" Markdown Live Preview
+nmap gM <Plug>MarkdownPreviewToggle
+" nmap gM :LivedownToggle<CR>
 
 " FZF parameters
 "
@@ -269,7 +276,11 @@ nnoremap <leader>lS :Mason<CR>
 
 " -----------------------------------------------------------------------------
 
-nnoremap <silent> <leader>TT :!tree -d -I node_modules<cr>
-nnoremap <silent> <leader>TA :!tree -I node_modules<cr>
+" nnoremap <silent> <leader>TT :!tree -d -I node_modules<cr>
+" nnoremap <silent> <leader>TA :!tree -I node_modules<cr>
+
+" nnoremap <leader>T :NERDTree<CR>
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <leader>TT :NERDTreeToggle<CR>
 
 lua require("baeriivan")

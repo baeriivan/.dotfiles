@@ -92,6 +92,7 @@ cmp_config = {
     })
   },
   sources = {
+    -- { name = 'supermaven' },
     { name = 'nvim_lsp' },
     { name = 'vsnip' },
     { name = 'path' },
@@ -105,3 +106,9 @@ cmp_config = {
 }
 
 cmp.setup(cmp_config)
+
+local supermaven = require('supermaven-nvim')
+supermaven.setup({})
+
+-- supermaven.api.use_free_version()
+-- supermaven.start()

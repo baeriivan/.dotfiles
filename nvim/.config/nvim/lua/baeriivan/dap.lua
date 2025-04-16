@@ -30,7 +30,8 @@ dapui.setup({
 require("nvim-dap-virtual-text").setup()
 
 
-dap.set_log_level("TRACE")
+-- dap.set_log_level("TRACE")
+dap.set_log_level("DEBUG")
 
 
 dap.adapters.python = {
@@ -38,16 +39,17 @@ dap.adapters.python = {
   command = os.getenv('HOME') .. '/.local/share/nvim/mason/packages/debugpy/venv/bin/python',
   args = { '-m', 'debugpy.adapter' },
 }
--- dap.adapters.chrome = {
---   type = 'executable',
---   command = 'node',
---   args = {os.getenv('HOME') .. '/.local/share/nvim/mason/packages/chrome-debug-adapter/src/nodeDebug.js'},
--- }
-dap.adapters.node2 = {
+dap.adapters.chrome = {
   type = 'executable',
   command = 'node',
-  args = { os.getenv('HOME') .. '/.local/share/nvim/mason/packages/node-debug2-adapter/out/src/nodeDebug.js' },
+  -- args = {os.getenv('HOME') .. '/vscode-node-debug2/out/src/nodeDebug.js'},
+  args = {os.getenv('HOME') .. '/.local/share/nvim/mason/packages/chrome-debug-adapter/out/src/chromeDebug.js'},
 }
+-- dap.adapters.node2 = {
+--   type = 'executable',
+--   command = 'node',
+--   args = { os.getenv('HOME') .. '/.local/share/nvim/mason/packages/node-debug2-adapter/out/src/nodeDebug.js' },
+-- }
 
 
 dap.configurations.python = {
@@ -60,16 +62,30 @@ dap.configurations.python = {
 }
 dap.configurations.typescript = {
   {
-    type = "node2",
-    name = "node attach",
+    name = "Debug (Attach) - Remote",
+    type = "chrome",
     request = "attach",
-    program = "${file}",
-    cwd = vim.fn.getcwd(),
+    -- program = "${file}",
+    -- cwd = vim.fn.getcwd(),
     sourceMaps = true,
-    protocol = "inspector",
-    port = 9229,
-    processId = require'dap.utils'.pick_process,
-  },
+    --      reAttach = true,
+    trace = true,
+    -- protocol = "inspector",
+    hostName = "localhost:4321",
+    port = 9222,
+    webRoot = "${workspaceFolder}"
+  }
+  -- {
+  --   type = "node2",
+  --   name = "node attach",
+  --   request = "attach",
+  --   program = "${file}",
+  --   cwd = vim.fn.getcwd(),
+  --   sourceMaps = true,
+  --   protocol = "inspector",
+  --   port = 9229,
+  --   processId = require'dap.utils'.pick_process,
+  -- },
   -- {
   --   type = "node2",
   --   name = "Attach to url with files served from ./out",
@@ -118,10 +134,10 @@ dap.configurations.typescript = {
 vim.keymap.set("n", "<F2>", ":lua require'dapui'.toggle()<CR>")
 vim.keymap.set("n", "<F3>", ":DapTerminate<CR>")
 vim.keymap.set("n", "<F4>", ":DapRestartFrame<CR>")
-vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
-vim.keymap.set("n", "<F6>", ":lua require'dap'.step_over()<CR>")
-vim.keymap.set("n", "<F7>", ":lua require'dap'.step_into()<CR>")
-vim.keymap.set("n", "<F8>", ":lua require'dap'.step_out()<CR>")
+vim.keymap.set("n", "<F5>", ":lua require'dap'.step_out()<CR>")
+vim.keymap.set("n", "<F6>", ":lua require'dap'.step_into()<CR>")
+vim.keymap.set("n", "<F7>", ":lua require'dap'.step_over()<CR>")
+vim.keymap.set("n", "<F8>", ":lua require'dap'.continue()<CR>")
 vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
 vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))()<CR>")
 

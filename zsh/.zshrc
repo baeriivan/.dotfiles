@@ -140,3 +140,11 @@ unset __conda_setup
 
 # Add fzf installed via nvim to path
 export PATH=$PATH:$HOME/.local/share/nvim/plugged/fzf/bin
+
+# MATLAB
+export PATH=$PATH:/usr/local/MATLAB/R2024a/bin
+
+export JAVA_PATH="/usr/lib/jvm/java-11-openjdk-amd64"
+
+# For tizen
+export PATH=$PATH:$HOME/bin/tizen-studio/tools/ide/bin
