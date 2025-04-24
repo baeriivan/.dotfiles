@@ -9,20 +9,20 @@ dapui.setup({
   controls = {
     icons = {
       -- disconnect = codicons.get('debug-disconnect', 'icon'),
-      pause = "",
-      play = "",
-      run_last = "",
-      step_back = "",
-      step_into = "",
-      step_out = "",
-      step_over = "",
-      terminate = ""
+      pause = "",
+      play = "",
+      run_last = "",
+      step_back = "",
+      step_into = "",
+      step_out = "",
+      step_over = "",
+      terminate = ""
     }
   },
   icons = {
-    collapsed = "",
-    current_frame = "",
-    expanded = ""
+    collapsed = "",
+    current_frame = "",
+    expanded = ""
   },
 
 })
@@ -30,8 +30,8 @@ dapui.setup({
 require("nvim-dap-virtual-text").setup()
 
 
--- dap.set_log_level("TRACE")
-dap.set_log_level("DEBUG")
+dap.set_log_level("TRACE")
+-- dap.set_log_level("DEBUG")
 
 
 dap.adapters.python = {
@@ -150,3 +150,19 @@ end
 -- dap.listeners.before.event_exited["dapui_config"] = function()
 --   dapui.close()
 -- end
+
+
+-- DAP Key mapping helper command
+vim.api.nvim_create_user_command("DapKeys", function()
+    print([[
+    <F2>     - Toggle DAP UI
+    <F3>     - Terminate Debugging
+    <F4>     - Restart Frame
+    <F5>     - Step Out
+    <F6>     - Step Into
+    <F7>     - Step Over
+    <F8>     - Continue
+    <leader>b - Toggle Breakpoint
+    <leader>B - Set Conditional Breakpoint
+    ]])
+  end, {})

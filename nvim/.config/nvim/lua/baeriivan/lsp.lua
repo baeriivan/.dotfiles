@@ -15,6 +15,7 @@ local on_attach = function ()
   local opts = { noremap=true, silent=true }
 
   vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
   vim.api.nvim_set_keymap('n', '<leader>tt', '<cmd>lua toggle_diagnostics()<CR>', opts)
   vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
@@ -32,6 +33,9 @@ local on_attach = function ()
   vim.api.nvim_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   vim.keymap.set('n', '<leader>=', function() vim.lsp.buf.format { async = true } end, opts)
+  vim.keymap.set('v', '=', function()
+    vim.lsp.buf.format { async = true }
+  end)
 end
 
 
@@ -64,8 +68,12 @@ require('mason-lspconfig').setup_handlers({
 
 
 local lspkind = require('lspkind')
-lsp.set_sign_icons()
-vim.diagnostic.config(lsp.defaults.diagnostics({}))
+lsp.set_sign_icons({
+  error = " ",
+  warn  = " ",
+  hint  = " ",
+  info  = " "
+})
 
 
 local cmp = require('cmp')
@@ -107,8 +115,16 @@ cmp_config = {
 
 cmp.setup(cmp_config)
 
+-- none-ls.nvim still uses 'null-ls'
+local null_ls = require("null-ls")
+null_ls.setup({
+  sources = {
+    null_ls.builtins.formatting.prettier, -- for TS, HTML, etc.
+    null_ls.builtins.formatting.black,    -- for Python
+    null_ls.builtins.formatting.stylua,   -- for Lua
+    null_ls.builtins.formatting.shfmt,    -- for shell scripts
+  },
+})
+
 local supermaven = require('supermaven-nvim')
 supermaven.setup({})
-
--- supermaven.api.use_free_version()
--- supermaven.start()

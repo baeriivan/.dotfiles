@@ -1,3 +1,5 @@
+runtime macros/matchit.vim
+
 "Download plug.vim and put it in the "autoload" directory.
 "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 call plug#begin() " -----------------------------------------------------------
@@ -7,6 +9,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'simeji/winresizer'
 Plug 'tpope/vim-sleuth'
+Plug 'tmhedberg/matchit'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -30,8 +33,6 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-" Plug 'shime/vim-livedown' "needs : npm install -g livedown
-" Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
 Plug 'onsails/lspkind-nvim' "pretty symbols
 Plug 'baeriivan/ng-file-alternate-vim'
 
@@ -51,16 +52,22 @@ Plug 'hrsh7th/vim-vsnip-integ'
 
 " Plug 'Jezda1337/nvim-html-css'
 
-Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v3.x'}
+Plug 'nvimtools/none-ls.nvim'
 
-" Plug 'mfussenegger/nvim-dap'
-" Plug 'nvim-neotest/nvim-nio'
-" Plug 'rcarriga/nvim-dap-ui'
-" Plug 'theHamsta/nvim-dap-virtual-text'
+Plug 'mfussenegger/nvim-dap'
+Plug 'nvim-neotest/nvim-nio'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
 Plug 'mortepau/codicons.nvim'
 
 Plug 'supermaven-inc/supermaven-nvim'
 " Plug 'github/copilot.vim'
+" Plug 'Exafunction/codeium.nvim'
+" >> add:
+" config = function()
+" require("codeium).setup({})
+" end
 
 call plug#end() " ------------------------------------------------------------
 
@@ -181,7 +188,6 @@ let g:vcoolor_lowercase = 1
 
 " Markdown Live Preview
 nmap gM <Plug>MarkdownPreviewToggle
-" nmap gM :LivedownToggle<CR>
 
 " FZF parameters
 "
@@ -266,20 +272,6 @@ nnoremap <leader>l2 :LspUninstall<CR>
 nnoremap <leader>ls :LspInfo<CR>
 nnoremap <leader>lS :Mason<CR>
 
-" vim-latex-live-preview " ----------------------------------------------------
-
-"let g:livepreview_previewer = 'okular'
-"let g:livepreview_engine = 'pdflatex' . ' -pdf' "xelatex
-"let g:livepreview_cursorhold_recompile = 0
-
-"nnoremap <leader>lx :LLPStartPreview
-
-" -----------------------------------------------------------------------------
-
-" nnoremap <silent> <leader>TT :!tree -d -I node_modules<cr>
-" nnoremap <silent> <leader>TA :!tree -I node_modules<cr>
-
-" nnoremap <leader>T :NERDTree<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <leader>TT :NERDTreeToggle<CR>
 

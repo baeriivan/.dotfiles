@@ -118,10 +118,15 @@ export PATH="$PATH:/opt/mssql-tools/bin"
 export CHROME_BIN="/usr/bin/brave-browser"
 
 
-# Load Angular CLI autocompletion.
-source <(ng completion script)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-export PATH=$PATH:$HOME/bin/miniconda3/bin
+if command -v ng &> /dev/null; then
+  # Load Angular CLI autocompletion.
+  source <(ng completion script)
+fi
+
+# export PATH=$PATH:$HOME/bin/miniconda3/bin
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -142,9 +147,18 @@ unset __conda_setup
 export PATH=$PATH:$HOME/.local/share/nvim/plugged/fzf/bin
 
 # MATLAB
-export PATH=$PATH:/usr/local/MATLAB/R2024a/bin
+# export PATH=$PATH:/usr/local/MATLAB/R2024a/bin
 
-export JAVA_PATH="/usr/lib/jvm/java-11-openjdk-amd64"
+# export JAVA_PATH="/usr/lib/jvm/java-11-openjdk-amd64"
 
 # For tizen
-export PATH=$PATH:$HOME/bin/tizen-studio/tools/ide/bin
+# export PATH=$PATH:$HOME/bin/tizen-studio/tools/ide/bin
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
