@@ -11,60 +11,103 @@ _G.toggle_diagnostics = function()
 end
 
 
-local on_attach = function ()
-  local opts = { noremap=true, silent=true }
+local lsp = require("lsp-zero")
+local lspconfig = require("lspconfig")
+local util = require("lspconfig.util")
 
-  vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>tt', '<cmd>lua toggle_diagnostics()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-  vim.api.nvim_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  -- vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  -- vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>wd', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>ac', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  vim.api.nvim_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+local on_attach = function (_, bufnr)
+  local opts = { noremap=true, silent=true, buffer = bufnr }
+
+  vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
+  vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, opts)
+  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+  vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
+  vim.keymap.set('n', '<leader>wd', vim.lsp.buf.remove_workspace_folder, opts)
+  vim.keymap.set('n', '<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, opts)
+  vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts)
+  vim.keymap.set('n', '<leader>lr', vim.lsp.buf.rename, opts)
+  vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, opts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
   vim.keymap.set('n', '<leader>=', function() vim.lsp.buf.format { async = true } end, opts)
   vim.keymap.set('v', '=', function()
-    vim.lsp.buf.format { async = true }
+    local start_pos = vim.api.nvim_buf_get_mark(0, "<")
+    local end_pos = vim.api.nvim_buf_get_mark(0, ">")
+
+    vim.lsp.buf.format({
+      async = true,
+      range = {
+        ["start"] = { start_pos[1] - 1, start_pos[2] },
+        ["end"] = { end_pos[1] - 1, end_pos[2] + 1 },
+      },
+    })
   end)
 end
 
+-- Helper: detect if current project is Angular
+local function is_angular_project(root_dir)
+  return util.root_pattern("angular.json", "nx.json")(root_dir) ~= nil
+end
 
-local lsp = require("lsp-zero")
-lsp.extend_lspconfig({
-  set_lsp_keymaps = false,
+local function close_client(client)
+  client.stop() -- deprecated
+  -- client.shutdown()
+  -- client.detach()
+end
+
+require("mason").setup()
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "lua_ls",
+    "pyright",
+    "vtsls",
+    "angularls",
+    "cssls",
+    "jsonls",
+    "pylsp",
+    "vimls",
+    "marksman",
+  },
+})
+
+lspconfig.lua_ls.setup({
+  on_attach = on_attach,
+  settings = {
+    Lua = { diagnostics = { globals = { "vim" } } },
+  },
+})
+
+lspconfig.angularls.setup({
+  on_attach = function(client, bufnr)
+    if not is_angular_project(client.config.root_dir) then
+      close_client(client)
+      return
+    end
+    on_attach(client, bufnr)
+  end,
+})
+
+lspconfig.vtsls.setup({
+  on_new_config = function(new_config, root_dir)
+    if is_angular_project(root_dir) then
+      new_config.enabled = false
+    end
+  end,
   on_attach = on_attach,
 })
 
-
-require('mason').setup()
-require('mason-lspconfig').setup()
-
-require('mason-lspconfig').setup_handlers({
-  function(server_name)
-    require('lspconfig')[server_name].setup({})
+lspconfig.ts_ls.setup({
+  on_attach = function(client)
+    close_client(client)
   end,
-  ['lua_ls'] = function()
-    require('lspconfig').lua_ls.setup({
-      settings = {
-        Lua = {
-          diagnostics = {
-            globals = { 'vim' }
-          }
-        }
-      }
-  })
-  end
 })
+
+lsp.preset("recommended")
+lsp.setup()
 
 
 local lspkind = require('lspkind')
